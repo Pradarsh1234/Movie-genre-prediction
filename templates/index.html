@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Genre Predictor</title>
+    <style>
+        /* Dark theme styling */
+        body {
+            background-color: #121212;
+            color: #E0E0E0;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            color: #BB86FC;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background-color: #1E1E1E;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 600px;
+        }
+
+        label {
+            font-size: 1.2rem;
+            color: #BB86FC;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #BB86FC;
+            background-color: #2A2A2A;
+            color: #E0E0E0;
+            font-size: 1rem;
+        }
+
+        input[type="submit"] {
+            background-color: #BB86FC;
+            color: #121212;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #A256EA;
+        }
+
+        #result {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1.2rem;
+            color: #03DAC6;
+        }
+
+        @media (max-width: 600px) {
+            form {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Movie Genre Predictor</h1>
+    <form action="/predict" method="post">
+        <label for="summary">Movie Summary:</label><br>
+        <textarea id="summary" name="summary" rows="4" cols="50" required></textarea><br><br>
+        <input type="submit" value="Predict Genre">
+    </form>
+    <div id="result">
+        <p id="genre"></p>
+    </div>
+    <script>
+        // Handle the form submission
+        document.querySelector('form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            document.getElementById('genre').innerText = `Predicted Genre: ${result.genre}`;
+        });
+    </script>
+</body>
+</html>
